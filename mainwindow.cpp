@@ -40,7 +40,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_connectButton_released()
 {
-    pnd = nfc_open(context, NULL);
+    nfc_connstring config = "pn532_uart:/dev/tty.usbserial-A1012X05";
+
+    pnd = nfc_open(context, config);
 
     if (pnd == NULL)
     {
@@ -106,14 +108,14 @@ void MainWindow::on_readButton_released()
         }
         ui->plainTextEdit->appendPlainText(st_info);
 
-        /*
-         * QString markup = "";
-        markup.sprintf("http://morg.123core.net/%s/\"",
+
+        QString markup = "";
+        markup.sprintf("http://morg.123core.net/members/cards/check/%s/",
                        st_info.toStdString().c_str());
 
         QUrl link(markup);
         QDesktopServices::openUrl(link);
-        */
+
 
     }
     else

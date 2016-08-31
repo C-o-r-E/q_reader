@@ -19,9 +19,9 @@ HEADERS  += mainwindow.h
 
 FORMS    += mainwindow.ui
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../local_install/lib/release/ -lnfc.5
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../local_install/lib/debug/ -lnfc.5
-else:unix: LIBS += -L$$PWD/../../../local_install/lib/ -lnfc.5
+
+
+macx: LIBS += -L$$PWD/../../../local_install/lib/ -lnfc.5
 
 INCLUDEPATH += $$PWD/../../../local_install/include
 DEPENDPATH += $$PWD/../../../local_install/include
