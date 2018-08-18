@@ -5,8 +5,8 @@
 #-------------------------------------------------
 
 QT       += core gui
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT       += widgets
+greaterThan(QT_MAJOR_VERSION, 5)
 
 TARGET = q_reader
 TEMPLATE = app
@@ -19,7 +19,9 @@ HEADERS  += mainwindow.h
 
 FORMS    += mainwindow.ui
 
-
+linux-g++ {
+ LIBS += -lnfc
+}
 
 macx: LIBS += -L$$PWD/../../../local_install/lib/ -lnfc.5
 

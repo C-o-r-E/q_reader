@@ -13,9 +13,17 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //TODO: decouple this
 
+#ifdef Q_OS_LINUX
+    QString usb_dev_pattern = "ttyUSB*";
+#endif
+
+#ifdef Q_OS_MACOS
+    QString usb_dev_pattern = "tty.usb*";
+#endif
+
 
     //lets find some tty devices
-    QDir devices("/dev", "tty.usb*", QDir::Name,QDir::System);
+    QDir devices("/dev", usb_dev_pattern, QDir::Name,QDir::System);
     //QStringList filters;
     //filters << "tty*";
     //devices.setNameFilters(filters);
@@ -75,12 +83,11 @@ void MainWindow::on_connectButton_released()
         return;
     }
 
-
-    //nfc_connstring config = n_conf.toStdString().c_str();
-    //nfc_connstring config = "pn532_uart:/dev/tty.usbserial-A1012X05";
-
+    /* Connect the explicit way
     pnd = nfc_open(context, n_conf.toStdString().c_str());
+    */
 
+    pnd = nfc_open(context, NULL);
     if (pnd == NULL)
     {
         ui->plainTextEdit->appendPlainText("Unable to open NFC device.");
