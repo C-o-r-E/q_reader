@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QDesktopServices>
 #include <QtDebug>
+#include <QDir>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -12,6 +13,24 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //TODO: decouple this
 
+
+    //lets find some tty devices
+    QDir devices("/dev", "tty.usb*", QDir::Name,QDir::System);
+    //QStringList filters;
+    //filters << "tty*";
+    //devices.setNameFilters(filters);
+
+    QStringList entries = devices.entryList();
+    ui->comboBox->addItems(entries);
+
+    QString temp = "";
+    temp.sprintf("found %d devs...", entries.count());
+    ui->plainTextEdit->appendPlainText(temp);
+    ui->plainTextEdit->appendPlainText("The following devices were found:");
+    for(int i=0; i<entries.count(); i++)
+    {
+        ui->plainTextEdit->appendPlainText(entries.at(i));
+    }
 
 
     // Initialize libnfc and set the nfc_context
@@ -40,9 +59,27 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_connectButton_released()
 {
-    nfc_connstring config = "pn532_uart:/dev/tty.usbserial-A1012X05";
+    QString n_dev = "";
+    QString n_conf = "";
 
-    pnd = nfc_open(context, config);
+    if(ui->comboBox->currentIndex() >= 0)
+    {
+        n_dev = ui->comboBox->itemText(ui->comboBox->currentIndex());
+        n_conf.sprintf("pn532_uart:/dev/%s", n_dev.toStdString().c_str());
+        qDebug() << "The conf string: " << n_conf;
+
+
+    }
+    else
+    {
+        return;
+    }
+
+
+    //nfc_connstring config = n_conf.toStdString().c_str();
+    //nfc_connstring config = "pn532_uart:/dev/tty.usbserial-A1012X05";
+
+    pnd = nfc_open(context, n_conf.toStdString().c_str());
 
     if (pnd == NULL)
     {

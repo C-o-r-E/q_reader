@@ -28,6 +28,9 @@
        </widget>
       </item>
       <item>
+       <widget class="QComboBox" name="comboBox"/>
+      </item>
+      <item>
        <widget class="QPlainTextEdit" name="plainTextEdit">
         <property name="readOnly">
          <bool>true</bool>
